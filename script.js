@@ -1,6 +1,14 @@
 // Select form and reminder list
 const drugForm = document.getElementById('drugForm');
 const reminderList = document.getElementById('reminderList');
+// Format 24-hour time to 12-hour AM/PM
+function formatTimeToAMPM(time) {
+  const [hour, minute] = time.split(':');
+  const h = parseInt(hour);
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  const hour12 = h % 12 === 0 ? 12 : h % 12;
+  return `${hour12}:${minute} ${ampm}`;
+}
 
 // Listen for form submission
 drugForm.addEventListener('submit', function (event) {
@@ -18,14 +26,15 @@ drugForm.addEventListener('submit', function (event) {
     alert('Please enter both the drug name and time.');
     return;
   }
-
+// Format time to AM/PM
+  const formattedTime = formatTimeToAMPM(time);
   // Create reminder <li>
   const li = document.createElement('li');
   li.className = 'reminder';
 
   // Create a span to hold the text
   const reminderText = document.createElement('span');
-  reminderText.textContent = `${drugName} @ ${time}`;
+  reminderText.textContent = `${drugName} @ ${formattedTime}`;
 
   // Create "Mark as Taken" button
   const markBtn = document.createElement('button');
@@ -43,7 +52,7 @@ drugForm.addEventListener('submit', function (event) {
     reminderList.removeChild(li); // Remove the reminder from the list
   };
 
-  // Put everything into the <li>
+  // Add elements to <li>
   li.appendChild(reminderText);
   li.appendChild(markBtn);
   li.appendChild(deleteBtn);
